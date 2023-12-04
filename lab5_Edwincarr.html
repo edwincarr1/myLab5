@@ -1,22 +1,25 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  </head>
-  <body>
-   <div class="container my-5">
-  <div class="p-5 text-center bg-body-tertiary rounded-3">
+name: Deploy static content to Pages
 
-    <h1 class="text-body-emphasis">Lab 5 CI/CD</h1>
-    <p class="col-lg-8 mx-auto fs-5 text-muted">
-     This code is deployed using Github Action code by Shiva Sharma 11/20/2023
-    </p>
-   
-  </div>
-</div>
-    
-  </body>
-</html>
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["shivatest"]
+jobs:
+  # Single deploy job since we're just deploying
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy file
+        uses: SamKirkland/FTP-Deploy-Action@2.0.0
+        env:
+          FTP_SERVER: home562576484.1and1-data.host
+          FTP_USERNAME: ${{secrets.ftp_username}}
+          FTP_PASSWORD: ${{ secrets.ftp_password }}
+          local_path: './*'
+          PORT: 22
+          METHOD: sftp
+          remote_path: '/site/IS436/lab5/shiva/'
+          sftp_only: true
